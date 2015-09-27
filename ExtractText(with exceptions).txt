@@ -1,0 +1,89 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+
+namespace ExtractText
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string fileName = ("..\\..\\Problem.txt");
+            try//contains the part of the code that will cause the exception
+            {
+                StreamReader reader = new StreamReader(fileName);
+                StringBuilder sb = new StringBuilder();//instantiate new Stringbuilder
+                //StreamReader reader = new StreamReader("..\\..\\Remove.txt");//instantiate new StreamReader
+                StreamWriter writer = new StreamWriter("..\\..\\Solved.txt");//instantiate new StreamWriter
+                using (reader)//automatically closes out reader
+                {
+                    string line = reader.ReadLine();//reads the first line of the text file Remove.txt
+
+                    while (line != null)//while line does not equal null(no content)
+                    {
+                        int start = line.IndexOf("<");// set start to equal location of <
+                        int end = line.IndexOf(">");// set end to equal locatio of >
+
+                        while (start != -1)// will keeps us moving through the loop if does not equal -1
+                        {
+                            line = line.Remove(start, end - start + 1);//line will remove places in the code starting with < and ending with >. +1 because index starts at 0
+                            start = line.IndexOf("<");//keeps looking for start in each line
+                            end = line.IndexOf(">");// keeps looking for end in each line
+
+                        }
+
+                        line = line.Trim();//removes white spaces
+                        if (line != " ")//do something if line is not empty
+                        {
+
+                            sb.Append(line);//appends the stringbuilder
+                            sb.AppendLine();// each lines print on separate lines
+                            line = reader.ReadLine();//reads the line
+                        }
+                        else
+                        {
+                            line = reader.ReadLine();
+                        }
+
+                    }
+
+                }
+                using (writer)//automatically closes out writer
+                {
+                    writer.Write(sb.ToString());//converts the contents of the stringbuilder to string
+                    Console.WriteLine(sb.ToString());//prints the conversion
+                    
+
+                }
+
+                Console.ReadLine();
+
+            }
+            catch (FileNotFoundException)   // if file Questions.txt doesn't exist, this block will execute and display the 
+            // following error
+            {
+                Console.WriteLine("Can not find file {0}.", fileName);//prints the string literal and the filename which is Problem.txt
+            }
+            catch (DirectoryNotFoundException)  // if the directory doesn't exist, this block will execute and display the 
+            // following error
+            {
+                Console.Error.WriteLine("Invalid directory in the file path.");
+            }
+            catch (IOException) // if file Questions.txt is corrupted or something, this block will execute and display the 
+            // following error
+            {
+                Console.Error.WriteLine("Cannot open the file {0}", fileName);
+            }
+            Console.ReadLine();
+          
+        
+    
+
+        }     
+    }
+}
+Output 
+Can not find file ..\\..\\Problem.txt.
